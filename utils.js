@@ -129,26 +129,6 @@ const capitalize = str => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-/**
- * Check if user is a teacher
- * @param {Object} user
- * @return {Boolean}
- */
-const isTeacher = ({ type }) => {
-  return type === "Teacher";
-};
-
-/**
- * Construct user link
- * @param {Object} user
- * @return {String}
- */
-const userLink = user => {
-  if (isNil(user)) return;
-  const base = isTeacher(user) ? "/profs/" : "/users/";
-  return base + user.id;
-};
-
 module.exports = {
   isNil,
   isObj,
