@@ -140,6 +140,5 @@ module.exports = {
   toKebabCase,
   getObjKeyName,
   addZero,
-  capitalize,
-  userLink
+  capitalize
 };
