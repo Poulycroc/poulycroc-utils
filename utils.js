@@ -141,6 +141,5 @@ module.exports = {
   getObjKeyName,
   addZero,
   capitalize,
-  isTeacher,
   userLink
 };
