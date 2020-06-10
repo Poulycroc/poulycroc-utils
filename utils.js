@@ -129,6 +129,18 @@ const capitalize = str => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+/**
+ * Omit one or multiple keys from Object
+ * 
+ * Inspiret from lodash'omit helper
+ * @param {Array} keys
+ * @param {Object} obj
+ */
+export const omit = (keys, obj) => {
+  const _o = Object.entries(obj);
+  return Object.fromEntries(_o.filter(([k]) => !keys.includes(k)));
+};
+
 module.exports = {
   isNil,
   isObj,
@@ -140,5 +152,6 @@ module.exports = {
   toKebabCase,
   getObjKeyName,
   addZero,
-  capitalize
+  capitalize,
+  omit
 };
