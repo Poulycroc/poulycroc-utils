@@ -136,7 +136,7 @@ const capitalize = str => {
  * @param {Array} keys
  * @param {Object} obj
  */
-export const omit = (keys, obj) => {
+const omit = (keys, obj) => {
   const _o = Object.entries(obj);
   return Object.fromEntries(_o.filter(([k]) => !keys.includes(k)));
 };
