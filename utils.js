@@ -66,6 +66,15 @@ const makeKey = length => {
 };
 
 /**
+ * Check if element is null or undefined
+ * @param {*} any - String to convert
+ * @return {Boolean}
+ */
+export const isBlank = str => {
+  return !str || /^\s*$/.test(str);
+};
+
+/**
  * Convert string to lowercase
  * @param {String} str - String to convert
  * @return {String}
@@ -131,7 +140,7 @@ const capitalize = str => {
 
 /**
  * Omit one or multiple keys from Object
- * 
+ *
  * Inspiret from lodash'omit helper
  * @param {Array} keys
  * @param {Object} obj
@@ -141,9 +150,74 @@ const omit = (keys, obj) => {
   return Object.fromEntries(_o.filter(([k]) => !keys.includes(k)));
 };
 
+/**
+ * Detect if it's an Array or Object
+ * @param {Object or Array} a
+ * @param {Object or Array} b
+ * @return {Boolean}
+ */
+export const isEqual = (a, b) => {
+  Object.compare = function (obj1, obj2) {
+    //Loop through properties in object 1
+    for (var p in obj1) {
+      //Check property exists on both objects
+      if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
+
+      switch (typeof obj1[p]) {
+        //Deep compare objects
+        case "object":
+          if (!Object.compare(obj1[p], obj2[p])) return false;
+          break;
+        //Compare function code
+        case "function":
+          if (
+            typeof obj2[p] == "undefined" ||
+            (p != "compare" && obj1[p].toString() != obj2[p].toString())
+          )
+            return false;
+          break;
+        //Compare values
+        default:
+          if (obj1[p] != obj2[p]) return false;
+      }
+    }
+
+    //Check object 2 for any extra properties
+    for (var p in obj2) if (typeof obj1[p] == "undefined") return false;
+    return true;
+  };
+
+  Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array) return false;
+
+    // compare lengths - can save a lot of time
+    if (this.length != array.length) return false;
+
+    for (var i = 0, l = this.length; i < l; i++) {
+      // Check if we have nested arrays
+      if (this[i] instanceof Array && array[i] instanceof Array) {
+        // recurse into the nested arrays
+        if (!this[i].equals(array[i])) return false;
+      } else if (this[i] != array[i]) {
+        // Warning - two different object instances will never be equal: {x:20} != {x:20}
+        return false;
+      }
+    }
+    return true;
+  };
+
+  if (isObj(a) && isObj(b)) return Object.compare(a, b);
+  if (isArray(a) && isArray(b)) return a.equals(b);
+
+  console.error("Can only compare 'Arrays' or 'Object'");
+  return false;
+};
+
 module.exports = {
   isNil,
   isObj,
+  isBlank,
   objPick,
   embedYtVideo,
   makeKey,
@@ -153,5 +227,6 @@ module.exports = {
   getObjKeyName,
   addZero,
   capitalize,
-  omit
+  omit,
+  isEqual
 };
