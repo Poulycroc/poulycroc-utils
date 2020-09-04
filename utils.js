@@ -156,7 +156,7 @@ const omit = (keys, obj) => {
  * @param {Object or Array} b
  * @return {Boolean}
  */
-export const isEqual = (a, b) => {
+const isEqual = (a, b) => {
   Object.compare = function (obj1, obj2) {
     //Loop through properties in object 1
     for (var p in obj1) {
