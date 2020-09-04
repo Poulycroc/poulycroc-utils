@@ -70,7 +70,7 @@ const makeKey = length => {
  * @param {*} any - String to convert
  * @return {Boolean}
  */
-export const isBlank = str => {
+const isBlank = str => {
   return !str || /^\s*$/.test(str);
 };
 
