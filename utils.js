@@ -208,7 +208,7 @@ const isEqual = (a, b) => {
   };
 
   if (isObj(a) && isObj(b)) return Object.compare(a, b);
-  if (isArray(a) && isArray(b)) return a.equals(b);
+  if (Array.isArray(a) && Array.isArray(b)) return a.equals(b);
 
   console.error("Can only compare 'Arrays' or 'Object'");
   return false;
