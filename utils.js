@@ -157,6 +157,9 @@ const omit = (keys, obj) => {
  * @return {Boolean}
  */
 const isEqual = (a, b) => {
+  if (!["object", "array"].includes(typeof a))
+    throw new Error("Can only compare 'Arrays' or 'Object'");
+
   Object.compare = function (obj1, obj2) {
     //Loop through properties in object 1
     for (var p in obj1) {
@@ -212,9 +215,6 @@ const isEqual = (a, b) => {
 
   if (isObject) return Object.compare(a, b);
   if (isArray) return a.equals(b);
-
-  if (!isObject && !isArray)
-    console.error("Can only compare 'Arrays' or 'Object'");
 
   return false;
 };
