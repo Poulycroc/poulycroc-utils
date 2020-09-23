@@ -75,6 +75,21 @@ const isBlank = str => {
 };
 
 /**
+ * Check if object or array is empty
+ * @param {Array or Object} elem
+ * @return {Boolean}
+ */
+const isEmpty = elem => {
+  if (isObj(elem)) {
+    return Object.keys(elem).length === 0 && elem.constructor === Object;
+  } else if (Array.isArray(elem)) {
+    return elem.length === 0;
+  } else {
+    throw new Error("Only accept 'Array' or 'Object'");
+  }
+};
+
+/**
  * Convert string to lowercase
  * @param {String} str - String to convert
  * @return {String}
@@ -223,6 +238,7 @@ module.exports = {
   isNil,
   isObj,
   isBlank,
+  isEmpty,
   objPick,
   embedYtVideo,
   makeKey,
