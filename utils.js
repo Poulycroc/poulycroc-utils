@@ -90,6 +90,15 @@ const isEmpty = elem => {
 };
 
 /**
+ * Check if is valid date
+ * @param {String} date
+ * @return {Boolean}
+ */
+const isValidDate = date => {
+  return date instanceof Date && !isNaN(date);
+};
+
+/**
  * Convert string to lowercase
  * @param {String} str - String to convert
  * @return {String}
@@ -239,6 +248,7 @@ module.exports = {
   isObj,
   isBlank,
   isEmpty,
+  isValidDate,
   objPick,
   embedYtVideo,
   makeKey,
