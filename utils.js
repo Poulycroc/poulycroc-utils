@@ -50,6 +50,18 @@ const embedYtVideo = url => {
 };
 
 /**
+ * @param {Array} arr
+ * @return {Array}
+ */
+const removeDuplicates = arr => {
+  const uniques = [];
+  arr.forEach(e => {
+    if (!uniques.includes(e)) uniques.push(e);
+  });
+  return uniques;
+};
+
+/**
  * generate a random string
  * @param {Number} length - length of random string
  * @return {String}
@@ -80,12 +92,16 @@ const isBlank = str => {
  * @return {Boolean}
  */
 const isEmpty = elem => {
-  if (isObj(elem)) {
-    return Object.keys(elem).length === 0 && elem.constructor === Object;
-  } else if (Array.isArray(elem)) {
-    return elem.length === 0;
+  if (!isNil(elem)) {
+    if (isObj(elem)) {
+      return Object.entries(elem).length === 0 && elem.constructor === Object;
+    } else if (Array.isArray(elem)) {
+      return elem.length === 0;
+    } else {
+      throw new Error("Only accept 'Array' or 'Object'");
+    }
   } else {
-    throw new Error("Only accept 'Array' or 'Object'");
+    throw new Error("Can't check if 'null' or 'undefined' is empty");
   }
 };
 
@@ -184,7 +200,7 @@ const isEqual = (a, b) => {
   if (!["object", "array"].includes(typeof a))
     throw new Error("Can only compare 'Arrays' or 'Object'");
 
-  Object.compare = function (obj1, obj2) {
+  Object.compare = function(obj1, obj2) {
     //Loop through properties in object 1
     for (var p in obj1) {
       //Check property exists on both objects
@@ -214,7 +230,7 @@ const isEqual = (a, b) => {
     return true;
   };
 
-  Array.prototype.equals = function (array) {
+  Array.prototype.equals = function(array) {
     // if the other array is a falsy value, return
     if (!array) return false;
 
@@ -256,6 +272,7 @@ module.exports = {
   getChildrenN,
   toKebabCase,
   getObjKeyName,
+  removeDuplicates,
   addZero,
   capitalize,
   omit,
