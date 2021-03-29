@@ -2,7 +2,7 @@
   "name": "poulycroc-utils",
   "version": "1.0.0",
   "description": "",
-  "main": "build.js",
+  "main": "utils.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Poulycroc/poulycroc-utils.git"
