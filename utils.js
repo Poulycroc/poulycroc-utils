@@ -179,7 +179,9 @@ const addZero = int => {
  * @return {String}
  */
 const capitalize = str => {
-  if (isNil(str)) return null;
+  if (isNil(str)) throw new Error("Value can't be 'null' or 'undefined'");
+  if (typeof str !== "string" || !str instanceof String)
+    throw new Error("Value need to be a string");
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
