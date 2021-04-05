@@ -8,17 +8,19 @@
  * @return {Boolean}
  */
 const isNil = any => {
-  return any === undefined || any === null;
+  return (
+    any === undefined || any === null || any === "undefined" || any === "null"
+  );
 };
 
 /**
  * Check if element is an object
- * @param {*} any - String to convert
+ * @param {*} any
  * @return {Boolean}
  */
 const isObj = any => {
-  if (isNil(any)) return;
-  return typeof any === "object";
+  if (isNil(any)) return false;
+  return typeof any === "object" && !Array.isArray(any);
 };
 
 /**
@@ -28,6 +30,7 @@ const isObj = any => {
  * @return {Object} - ex: { fname:"xyz", lname:"abc" }
  */
 const objPick = (model, object) => {
+  if (isNil(model) || isNil(object)) return null;
   const res = {};
   Object.keys(model).forEach(key => (res[key] = object[key]));
   return res;
@@ -39,21 +42,22 @@ const objPick = (model, object) => {
  * @return {String}
  */
 const embedYtVideo = url => {
+  if (!url.includes("youtu")) throw new Error("Only accept YouTube url");
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
 
-  if (match && match[2].length === 11) {
-    return match[2];
-  } else {
-    return "error";
-  }
+  if (match && match[2].length === 11) return match[2];
+  return "error";
 };
 
 /**
+ * Remove duplicated value from array
  * @param {Array} arr
  * @return {Array}
  */
 const removeDuplicates = arr => {
+  if (isNil(arr)) throw new Error("Can't work on undifined value");
+  if (!Array.isArray(arr)) throw new Error("Only accept 'Array'");
   const uniques = [];
   arr.forEach(e => {
     if (!uniques.includes(e)) uniques.push(e);
@@ -67,7 +71,7 @@ const removeDuplicates = arr => {
  * @return {String}
  */
 const makeKey = length => {
-  const n = length === undefined ? 6 : length;
+  const n = isNil(length) ? 6 : length;
   let result = "";
   const chr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const chrLength = chr.length;
@@ -143,7 +147,7 @@ const getChildrenN = (obj, numb) => {
  * @return {String}
  */
 const toKebabCase = str => {
-  if (isNil(str)) return;
+  if (isNil(str)) return null;
   return str
     .replace(/([a-z])([A-Z])/g, "$1-$2")
     .replace(/\s+/g, "-")
@@ -165,7 +169,8 @@ const getObjKeyName = obj => {
  * @return {String}
  */
 const addZero = int => {
-  return int < 10 ? `0${int}` : int;
+  if (isNil(int)) return null;
+  return int < 10 ? `0${int}` : `${int}`;
 };
 
 /**
@@ -174,7 +179,7 @@ const addZero = int => {
  * @return {String}
  */
 const capitalize = str => {
-  if (isNil(str)) return;
+  if (isNil(str)) return null;
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
@@ -186,6 +191,8 @@ const capitalize = str => {
  * @param {Object} obj
  */
 const omit = (keys, obj) => {
+  if (isNil(keys) || isNil(obj)) return null;
+  if (!isObj(obj) || !Array.isArray(keys)) return null;
   const _o = Object.entries(obj);
   return Object.fromEntries(_o.filter(([k]) => !keys.includes(k)));
 };
@@ -197,10 +204,7 @@ const omit = (keys, obj) => {
  * @return {Boolean}
  */
 const isEqual = (a, b) => {
-  if (!["object", "array"].includes(typeof a))
-    throw new Error("Can only compare 'Arrays' or 'Object'");
-
-  Object.compare = function(obj1, obj2) {
+  Object.compare = function (obj1, obj2) {
     //Loop through properties in object 1
     for (var p in obj1) {
       //Check property exists on both objects
@@ -226,11 +230,11 @@ const isEqual = (a, b) => {
     }
 
     //Check object 2 for any extra properties
-    for (var p in obj2) if (typeof obj1[p] == "undefined") return false;
+    for (var p in obj2) if (isNil(obj1[p])) return false;
     return true;
   };
 
-  Array.prototype.equals = function(array) {
+  Array.prototype.equals = function (array) {
     // if the other array is a falsy value, return
     if (!array) return false;
 
@@ -256,7 +260,7 @@ const isEqual = (a, b) => {
   if (isObject) return Object.compare(a, b);
   if (isArray) return a.equals(b);
 
-  return false;
+  throw new Error("Can only compare 'Arrays' or 'Object'");
 };
 
 module.exports = {
