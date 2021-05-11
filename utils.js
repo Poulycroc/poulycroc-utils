@@ -7,7 +7,7 @@
  * @param {*} any - String to convert
  * @return {Boolean}
  */
-const isNil = any => {
+const isNil = (any) => {
   return (
     any === undefined || any === null || any === "undefined" || any === "null"
   );
@@ -18,7 +18,7 @@ const isNil = any => {
  * @param {*} any
  * @return {Boolean}
  */
-const isObj = any => {
+const isObj = (any) => {
   if (isNil(any)) return false;
   return typeof any === "object" && !Array.isArray(any);
 };
@@ -32,7 +32,7 @@ const isObj = any => {
 const objPick = (model, object) => {
   if (isNil(model) || isNil(object)) return null;
   const res = {};
-  Object.keys(model).forEach(key => (res[key] = object[key]));
+  Object.keys(model).forEach((key) => (res[key] = object[key]));
   return res;
 };
 
@@ -41,7 +41,7 @@ const objPick = (model, object) => {
  * @param {Number} url - url's video
  * @return {String}
  */
-const embedYtVideo = url => {
+const embedYtVideo = (url) => {
   if (!url.includes("youtu")) throw new Error("Only accept YouTube url");
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
@@ -55,11 +55,11 @@ const embedYtVideo = url => {
  * @param {Array} arr
  * @return {Array}
  */
-const removeDuplicates = arr => {
+const removeDuplicates = (arr) => {
   if (isNil(arr)) throw new Error("Can't work on undifined value");
   if (!Array.isArray(arr)) throw new Error("Only accept 'Array'");
   const uniques = [];
-  arr.forEach(e => {
+  arr.forEach((e) => {
     if (!uniques.includes(e)) uniques.push(e);
   });
   return uniques;
@@ -70,7 +70,7 @@ const removeDuplicates = arr => {
  * @param {Number} length - length of random string
  * @return {String}
  */
-const makeKey = length => {
+const makeKey = (length) => {
   const n = isNil(length) ? 6 : length;
   let result = "";
   const chr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -86,7 +86,7 @@ const makeKey = length => {
  * @param {*} any - String to convert
  * @return {Boolean}
  */
-const isBlank = str => {
+const isBlank = (str) => {
   return !str || /^\s*$/.test(str);
 };
 
@@ -95,7 +95,7 @@ const isBlank = str => {
  * @param {Array or Object} elem
  * @return {Boolean}
  */
-const isEmpty = elem => {
+const isEmpty = (elem) => {
   if (!isNil(elem)) {
     if (isObj(elem)) {
       return Object.entries(elem).length === 0 && elem.constructor === Object;
@@ -114,7 +114,7 @@ const isEmpty = elem => {
  * @param {String} date
  * @return {Boolean}
  */
-const isValidDate = date => {
+const isValidDate = (date) => {
   return date instanceof Date && !isNaN(date);
 };
 
@@ -123,7 +123,7 @@ const isValidDate = date => {
  * @param {String} str - String to convert
  * @return {String}
  */
-const lower = str => {
+const lower = (str) => {
   return str.toLowerCase();
 };
 
@@ -146,7 +146,7 @@ const getChildrenN = (obj, numb) => {
  * @param {String} str - String to convert
  * @return {String}
  */
-const toKebabCase = str => {
+const toKebabCase = (str) => {
   if (isNil(str)) return null;
   return str
     .replace(/([a-z])([A-Z])/g, "$1-$2")
@@ -158,7 +158,7 @@ const toKebabCase = str => {
  * @param {Object} obj - String to convert
  * @return {String}
  */
-const getObjKeyName = obj => {
+const getObjKeyName = (obj) => {
   if (isNil(obj) && !isObj(obj)) return;
   return Object.keys(obj)[0];
 };
@@ -168,8 +168,9 @@ const getObjKeyName = obj => {
  * @param {Number or String} int
  * @return {String}
  */
-const addZero = int => {
-  if (isNil(int)) return null;
+const addZero = (int) => {
+  if (isNil(int)) throw new Error("Value can't be 'null' or 'undefined'");
+  if (isNaN(int)) throw new Error("'addZero' only accept 'Int' or 'Number'");
   return int < 10 ? `0${int}` : `${int}`;
 };
 
@@ -178,7 +179,7 @@ const addZero = int => {
  * @param {String} str
  * @return {String}
  */
-const capitalize = str => {
+const capitalize = (str) => {
   if (isNil(str)) throw new Error("Value can't be 'null' or 'undefined'");
   if (typeof str !== "string" || !str instanceof String)
     throw new Error("Value need to be a string");
@@ -206,6 +207,8 @@ const omit = (keys, obj) => {
  * @return {Boolean}
  */
 const isEqual = (a, b) => {
+  if (arguments.length < 2) throw Error("You only can compar 2 element");
+
   Object.compare = function (obj1, obj2) {
     //Loop through properties in object 1
     for (var p in obj1) {
@@ -265,6 +268,34 @@ const isEqual = (a, b) => {
   throw new Error("Can only compare 'Arrays' or 'Object'");
 };
 
+/**
+ * @param {Array} arr
+ * @param {Number} val
+ * @return {*}
+ */
+const arrIndexOf = (arr, val) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] == val) return i;
+  }
+  return -1;
+};
+
+/**
+ * @param {Array or Object} source
+ * @return {*}
+ */
+const deepCopy = (source) => {
+  if (!Array.isArray(a) && !isObj(source)) return source;
+  const result = {};
+  for (let key in source) {
+    result[key] =
+      typeof source[key] === "object"
+        ? this.deepCopy(source[key])
+        : source[key];
+  }
+  return result;
+};
+
 module.exports = {
   isNil,
   isObj,
@@ -282,5 +313,7 @@ module.exports = {
   addZero,
   capitalize,
   omit,
-  isEqual
+  isEqual,
+  arrIndexOf,
+  deepCopy,
 };

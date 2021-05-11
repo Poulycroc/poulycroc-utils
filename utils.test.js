@@ -62,7 +62,7 @@ describe("embedYtVideo testing", () => {
 });
 
 // removeDuplicates
-describe("embedYtVideo testing", () => {
+describe("removeDuplicates testing", () => {
   test("check with all same value's type", () => {
     const arr = ["max", "joe", "joe", "ardyan"];
     const expectResult = ["max", "joe", "ardyan"];
@@ -101,7 +101,7 @@ describe("embedYtVideo testing", () => {
 });
 
 // makeKey
-describe("embedYtVideo testing", () => {
+describe("makeKey testing", () => {
   test("check key generate", () => {
     const l = utils.makeKey().length;
     expect(l).toBe(6);
@@ -113,7 +113,7 @@ describe("embedYtVideo testing", () => {
 });
 
 // isEmpty
-describe("embedYtVideo testing", () => {
+describe("isEmpty testing", () => {
   test("chekc if Array is empty", () => {
     expect(utils.isEmpty([])).toBe(true);
   });
@@ -152,8 +152,16 @@ describe("addZero testing", () => {
     expect(utils.addZero("12")).toStrictEqual("12");
   });
   test("check if with null or defined value return null", () => {
-    expect(utils.addZero(null)).toBe(null);
-    expect(utils.addZero(undefined)).toBe(null);
+    const err = "Value can't be 'null' or 'undefined'";
+    const callAddZero_null = () => utils.addZero(null);
+    const callAddZero_undefined = () => utils.addZero(undefined);
+    expect(callAddZero_null).toThrowError(err);
+    expect(callAddZero_undefined).toThrowError(err);
+  });
+  test("Check if NaN element throw error", () => {
+    const err = "'addZero' only accept 'Int' or 'Number'";
+    const callAddZero_NaN = () => utils.addZero('NaN');
+    expect(callAddZero_NaN).toThrowError(err);
   });
 });
 
