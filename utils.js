@@ -43,7 +43,8 @@ const objPick = (model, object) => {
  */
 const embedYtVideo = (url) => {
   if (!url.includes("youtu")) throw new Error("Only accept YouTube url");
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
 
   if (match && match[2].length === 11) return match[2];
@@ -296,6 +297,28 @@ const deepCopy = (source) => {
   return result;
 };
 
+/**
+ * transform string in Object path
+ * @param source {Array|Object}
+ * @param string {String}
+ * @returns Object path
+ */
+const convertStringToPropGetter = (source, string) => {
+  if (isNil(string)) return;
+  return string.split(".").reduce((o, i) => o[i], source);
+};
+
+/**
+ * Gonna rend a string of params
+ * @param {Object} obj
+ * @return {String}
+ */
+const constructQueries = (obj) => {
+  const arr = [];
+  Object.keys(obj).forEach((key) => arr.push(`${key}=${obj[key]}`));
+  return arr.join("&");
+};
+
 module.exports = {
   isNil,
   isObj,
@@ -316,4 +339,6 @@ module.exports = {
   isEqual,
   arrIndexOf,
   deepCopy,
+  convertStringToPropGetter,
+  constructQueries,
 };
