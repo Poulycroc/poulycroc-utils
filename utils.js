@@ -319,6 +319,50 @@ const constructQueries = (obj) => {
   return arr.join("&");
 };
 
+/**
+ * Get child object form value
+ * from Object or Array
+ *
+ * only use if your value is inside a object
+ *
+ * @param {Array or Object} focus
+ * @param {String} keyName - in wich key
+ * @param {Any} value - searched value
+ * @return {Object}
+ */
+const getObjectFromValue = (focus, keyName, value) => {
+  if (isNil(focus) || isNil(keyName) || isNil(value)) return null;
+
+  let res = null;
+  if (Array.isArray(focus)) {
+    focus.forEach((elem) => {
+      if (elem[keyName] === value) res = elem;
+    });
+  } else {
+    Object.keys(focus).forEach((elem) => {
+      if (focus[elem][keyName] === value) res = focus[elem];
+    });
+  }
+  return res;
+};
+
+/**
+ * Return only object's keys needed
+ * @param {Array} keys
+ * @param {Object} obj
+ * @return {Object}
+ */
+const only = (keys, obj) => {
+  if (isNil(keys) || isNil(obj)) return null;
+  if (!isObj(obj) || !Array.isArray(keys)) return null;
+
+  const res = {};
+  keys.forEach((key) => {
+    Object.assign(res, { [key]: obj[key] });
+  });
+  return res;
+};
+
 module.exports = {
   isNil,
   isObj,
@@ -327,6 +371,7 @@ module.exports = {
   isValidDate,
   objPick,
   embedYtVideo,
+  only,
   makeKey,
   lower,
   getChildrenN,
@@ -341,4 +386,5 @@ module.exports = {
   deepCopy,
   convertStringToPropGetter,
   constructQueries,
+  getObjectFromValue,
 };

@@ -160,7 +160,7 @@ describe("addZero testing", () => {
   });
   test("Check if NaN element throw error", () => {
     const err = "'addZero' only accept 'Int' or 'Number'";
-    const callAddZero_NaN = () => utils.addZero('NaN');
+    const callAddZero_NaN = () => utils.addZero("NaN");
     expect(callAddZero_NaN).toThrowError(err);
   });
 });
@@ -227,5 +227,39 @@ describe("isEqual testing", () => {
     const a = { fname: "xyz", lname: "abc", age: 23 };
     const b = { fname: "azr", lname: "aaa", age: 23 };
     expect(utils.isEqual(a, b)).toBe(false);
+  });
+});
+
+// only
+describe("only testing", () => {
+  test("check if add zero on first character", () => {
+    const obj = { name: "Doe", firstname: "John", id: 23 };
+    const newObj = { name: "Doe" };
+    expect(utils.only(["name"], obj)).toStrictEqual(newObj);
+  });
+  test("check if value in only are not excepted", () => {
+    const o = { name: "Doe", firstname: "John", id: 23 };
+    expect(utils.only(1, o)).toStrictEqual(null);
+    expect(utils.only("1", o)).toStrictEqual(null);
+    expect(utils.only(["1"], "o")).toStrictEqual(null);
+    expect(utils.only(["1"], ["o"])).toStrictEqual(null);
+  });
+  test("check if with null or defined value return null", () => {
+    expect(utils.only(null)).toBe(null);
+    expect(utils.only(undefined)).toBe(null);
+  });
+});
+
+// only
+describe("getObjectFromValue testing", () => {
+  test("check if add zero on first character", () => {
+    const arrs = [
+      { name: "Doe", firstname: "John", id: 23 },
+      { name: "Skywalker", firstname: "Luck", id: 12 },
+      { name: "Skywalker", firstname: "Anakin", id: 34 },
+      { name: "Nolastname", firstname: "Dewey", id: 21 },
+    ];
+    const res = { name: "Skywalker", firstname: "Anakin", id: 34 };
+    expect(utils.getObjectFromValue(arrs, "id", 34)).toStrictEqual(res);
   });
 });
