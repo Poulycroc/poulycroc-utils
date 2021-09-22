@@ -143,6 +143,19 @@ describe("toKebabCase testing", () => {
   });
 });
 
+// toSnakeCase
+describe("toSnakeCase testing", () => {
+  test("check toSnakeCase convertion", () => {
+    const str = "PageComponent";
+    const res = "page_component";
+    expect(utils.toSnakeCase(str)).toStrictEqual(res);
+  });
+  test("check toSnakeCase convertion with null or undefined", () => {
+    expect(utils.toSnakeCase(null)).toBe(null);
+    expect(utils.toSnakeCase(undefined)).toBe(null);
+  });
+});
+
 // addZero
 describe("addZero testing", () => {
   test("check if add zero on first character", () => {
