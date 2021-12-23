@@ -201,6 +201,21 @@ const capitalize = (str) => {
 };
 
 /**
+ * Pluralize
+ * @param {String} singular
+ * @param {Number} count
+ * @param {String|null} plural
+ * @return {string}
+ */
+const pluralize = (singular, count = 1, plural = null) => {
+  if (isNil(singular)) throw new Error("Value can't be 'null' or 'undefined'");
+  if (typeof singular !== "string" || !singular instanceof String)
+    throw new Error("Value need to be a string");
+  if (isNil(plural)) return count > 1 ? `${singular}s` : singular;
+  return count > 1 || count === 0 ? plural : singular;
+};
+
+/**
  * Omit one or multiple keys from Object
  *
  * Inspiret from lodash'omit helper
@@ -299,7 +314,7 @@ const arrIndexOf = (arr, val) => {
  * @return {*}
  */
 const deepCopy = (source) => {
-  if (!Array.isArray(a) && !isObj(source)) return source;
+  if (!isObj(source)) return source;
   const result = {};
   for (let key in source) {
     result[key] =
@@ -394,6 +409,7 @@ module.exports = {
   removeDuplicates,
   addZero,
   capitalize,
+  pluralize,
   omit,
   isEqual,
   arrIndexOf,

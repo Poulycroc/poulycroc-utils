@@ -199,6 +199,31 @@ describe("capitalize testing", () => {
   });
 });
 
+// pluralize
+describe("pluralize testing", () => {
+  test("check if capitalize correctly: 'company'", () => {
+    const singular = "company";
+    const count = 2;
+    const plural = "companies";
+    const res = "companies";
+    expect(utils.pluralize(singular, count, plural)).toStrictEqual(res);
+  });
+  test("check if capitalize correctly: 'campaign'", () => {
+    const singular = "campaign";
+    const count = 2;
+    const plural = null;
+    const res = "campaigns";
+    expect(utils.pluralize(singular, count, plural)).toStrictEqual(res);
+  });
+  test("check if with null or defined value return null", () => {
+    const err = "Value can't be 'null' or 'undefined'";
+    const callCapitalize_null = () => utils.capitalize(null);
+    const callCapitalize_undefined = () => utils.capitalize(undefined);
+    expect(callCapitalize_null).toThrowError(err);
+    expect(callCapitalize_undefined).toThrowError(err);
+  });
+});
+
 // omit
 describe("omit testing", () => {
   test("check if add zero on first character", () => {
