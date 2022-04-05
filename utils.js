@@ -391,6 +391,14 @@ const only = (keys, obj) => {
   return res;
 };
 
+/**
+ * @param {String} string
+ * @return {Boolean}
+ */
+const isDigitsOnly = (string) => {
+  return [...string].every((c) => "0123456789".includes(c));
+};
+
 module.exports = {
   isNil,
   isObj,
@@ -400,6 +408,7 @@ module.exports = {
   objPick,
   embedYtVideo,
   only,
+  isDigitsOnly,
   makeKey,
   lower,
   getChildrenN,

@@ -301,3 +301,19 @@ describe("getObjectFromValue testing", () => {
     expect(utils.getObjectFromValue(arrs, "id", 34)).toStrictEqual(res);
   });
 });
+
+// isDigitsOnly
+describe("getObjectFromValue testing", () => {
+  test("check if '123' return true", () => {
+    expect(utils.isDigitsOnly("123")).toBe(true);
+  });
+  test("check if all others return false", () => {
+    expect(utils.isDigitsOnly("+123")).toBe(false);
+    expect(utils.isDigitsOnly("-123")).toBe(false);
+    expect(utils.isDigitsOnly("123.")).toBe(false);
+    expect(utils.isDigitsOnly(".123")).toBe(false);
+    expect(utils.isDigitsOnly("123.0")).toBe(false);
+    expect(utils.isDigitsOnly("0.123")).toBe(false);
+    expect(utils.isDigitsOnly("Hello, world!")).toBe(false);
+  });
+});
