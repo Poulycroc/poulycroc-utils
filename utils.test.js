@@ -303,7 +303,7 @@ describe("getObjectFromValue testing", () => {
 });
 
 // isDigitsOnly
-describe("getObjectFromValue testing", () => {
+describe("isDigitsOnly testing", () => {
   test("check if '123' return true", () => {
     expect(utils.isDigitsOnly("123")).toBe(true);
   });
