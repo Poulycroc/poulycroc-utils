@@ -270,21 +270,35 @@ describe("isEqual testing", () => {
 
 // only
 describe("only testing", () => {
+  const obj = { name: "Doe", firstname: "John", id: 23 };
   test("check if add zero on first character", () => {
-    const obj = { name: "Doe", firstname: "John", id: 23 };
     const newObj = { name: "Doe" };
     expect(utils.only(["name"], obj)).toStrictEqual(newObj);
   });
   test("check if value in only are not excepted", () => {
-    const o = { name: "Doe", firstname: "John", id: 23 };
-    expect(utils.only(1, o)).toStrictEqual(null);
-    expect(utils.only("1", o)).toStrictEqual(null);
-    expect(utils.only(["1"], "o")).toStrictEqual(null);
-    expect(utils.only(["1"], ["o"])).toStrictEqual(null);
+    const firstNeedToByArray = "First param need to be an Array";
+    const secondNeedToByObj = "Second param need to be an Object";
+
+    const first_is_nbr = () => utils.only(1, obj);
+    expect(first_is_nbr).toThrowError(firstNeedToByArray);
+
+    const first_is_str = () => utils.only("1", obj);
+    expect(first_is_str).toThrowError(firstNeedToByArray);
+
+    const second_is_str = () => utils.only(["1"], "o");
+    expect(second_is_str).toThrowError(secondNeedToByObj);
+
+    const second_is_arr = () => utils.only(["1"], ["o"]);
+    expect(second_is_arr).toThrowError(secondNeedToByObj);
   });
   test("check if with null or defined value return null", () => {
-    expect(utils.only(null)).toBe(null);
-    expect(utils.only(undefined)).toBe(null);
+    const err = "'keys' or 'obj' can't be 'null' or 'undefined'";
+    
+    const first_is_null = () => utils.only(null, obj);
+    expect(first_is_null).toThrowError(err);
+
+    const first_is_undefined = () => utils.only(undefined, obj);
+    expect(first_is_undefined).toThrowError(err);
   });
 });
 

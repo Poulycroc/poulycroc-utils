@@ -37,52 +37,6 @@ const objPick = (model, object) => {
 };
 
 /**
- * generating embed vo
- * @param {Number} url - url's video
- * @return {String}
- */
-const embedYtVideo = (url) => {
-  if (!url.includes("youtu")) throw new Error("Only accept YouTube url");
-  const regExp =
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-
-  if (match && match[2].length === 11) return match[2];
-  return "error";
-};
-
-/**
- * Remove duplicated value from array
- * @param {Array} arr
- * @return {Array}
- */
-const removeDuplicates = (arr) => {
-  if (isNil(arr)) throw new Error("Can't work on undifined value");
-  if (!Array.isArray(arr)) throw new Error("Only accept 'Array'");
-  const uniques = [];
-  arr.forEach((e) => {
-    if (!uniques.includes(e)) uniques.push(e);
-  });
-  return uniques;
-};
-
-/**
- * generate a random string
- * @param {Number} length - length of random string
- * @return {String}
- */
-const makeKey = (length) => {
-  const n = isNil(length) ? 6 : length;
-  let result = "";
-  const chr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const chrLength = chr.length;
-  for (let i = 0; i < n; i++) {
-    result += chr.charAt(Math.floor(Math.random() * chrLength));
-  }
-  return result;
-};
-
-/**
  * Check if element is null or undefined
  * @param {*} any - String to convert
  * @return {Boolean}
@@ -120,15 +74,6 @@ const isValidDate = (date) => {
 };
 
 /**
- * Convert string to lowercase
- * @param {String} str - String to convert
- * @return {String}
- */
-const lower = (str) => {
-  return str.toLowerCase();
-};
-
-/**
  * get Children's object by position
  * @param {Object} obj - Object to pars
  * @param {Number} numb - Children position we want
@@ -143,76 +88,12 @@ const getChildrenN = (obj, numb) => {
 };
 
 /**
- * Convert CamelCaseString to kebab-case-string
- * @param {String} str - String to convert
- * @return {String}
- */
-const toKebabCase = (str) => {
-  if (isNil(str)) return null;
-  return str
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .replace(/\s+/g, "-")
-    .toLowerCase();
-};
-
-/**
- * Convert CamelCaseString to snake_case
- * @param {String} str - String to convert
- * @return {String}
- */
-const toSnakeCase = (str) => {
-  if (isNil(str)) return null;
-  return str
-    .replace(/([a-z])([A-Z])/g, "$1_$2")
-    .replace(/\s+/g, "_")
-    .toLowerCase();
-};
-
-/**
  * @param {Object} obj - String to convert
  * @return {String}
  */
 const getObjKeyName = (obj) => {
   if (isNil(obj) && !isObj(obj)) return;
   return Object.keys(obj)[0];
-};
-
-/**
- * Convert number like '2' into '02'
- * @param {Number or String} int
- * @return {String}
- */
-const addZero = (int) => {
-  if (isNil(int)) throw new Error("Value can't be 'null' or 'undefined'");
-  if (isNaN(int)) throw new Error("'addZero' only accept 'Int' or 'Number'");
-  return int < 10 ? `0${int}` : `${int}`;
-};
-
-/**
- * First letter in uppercase
- * @param {String} str
- * @return {String}
- */
-const capitalize = (str) => {
-  if (isNil(str)) throw new Error("Value can't be 'null' or 'undefined'");
-  if (typeof str !== "string" || !str instanceof String)
-    throw new Error("Value need to be a string");
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-/**
- * Pluralize
- * @param {String} singular
- * @param {Number} count
- * @param {String|null} plural
- * @return {string}
- */
-const pluralize = (singular, count = 1, plural = null) => {
-  if (isNil(singular)) throw new Error("Value can't be 'null' or 'undefined'");
-  if (typeof singular !== "string" || !singular instanceof String)
-    throw new Error("Value need to be a string");
-  if (isNil(plural)) return count > 1 ? `${singular}s` : singular;
-  return count > 1 || count === 0 ? plural : singular;
 };
 
 /**
@@ -298,18 +179,6 @@ const isEqual = (a, b) => {
 };
 
 /**
- * @param {Array} arr
- * @param {Number} val
- * @return {*}
- */
-const arrIndexOf = (arr, val) => {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] == val) return i;
-  }
-  return -1;
-};
-
-/**
  * @param {Array or Object} source
  * @return {*}
  */
@@ -381,8 +250,10 @@ const getObjectFromValue = (focus, keyName, value) => {
  * @return {Object}
  */
 const only = (keys, obj) => {
-  if (isNil(keys) || isNil(obj)) return null;
-  if (!isObj(obj) || !Array.isArray(keys)) return null;
+  if (isNil(keys) || isNil(obj))
+    throw new Error("'keys' or 'obj' can't be 'null' or 'undefined'");
+  if (!Array.isArray(keys)) throw new Error("First param need to be an Array");
+  if (!isObj(obj)) throw new Error("Second param need to be an Object");
 
   const res = {};
   keys.forEach((key) => {
@@ -399,31 +270,202 @@ const isDigitsOnly = (string) => {
   return [...string].every((c) => "0123456789".includes(c));
 };
 
+/**
+ * @param {Object} obj
+ * @param {String} key
+ * @return {Boolean}
+ */
+const hasOwnProperty = (obj, key) => {
+  if (isNil(obj) || isNil(key)) return false;
+  if (!isObj(obj)) throw new Error("First param need to be an 'Object'");
+  return Object.prototype.hasOwnProperty.call(obj, key);
+};
+
+/**
+ * @param {Object} source
+ * @param {Boolean} condition
+ * @param {Object} merge
+ * @return {Object}
+ */
+const mergeObjIf = (source = {}, condition = false, merge = {}) => {
+  if (isNil(source) || isNil(merge))
+    throw new Error("Can't merge 'null' or 'undefined'");
+
+  if (!isObj(source) || !isObj(merge))
+    throw new Error("Can only merge 'Object'");
+
+  const _m = condition ? merge : {};
+  return Object.assign({}, source, _m);
+};
+
+const groupByKey = (array, key) => {
+  return array.reduce((hash, obj) => {
+    if (isNil(obj[key])) return hash;
+    return Object.assign(hash, {
+      [obj[key]]: (hash[obj[key]] || []).concat(obj),
+    });
+  }, {});
+};
+
+/**
+ * Remove duplicated value from array
+ * @param {Array} arr
+ * @return {Array}
+ */
+const removeDuplicates = (arr) => {
+  if (isNil(arr)) throw new Error("Can't work on undifined value");
+  if (!Array.isArray(arr)) throw new Error("Only accept 'Array'");
+  const uniques = [];
+  arr.forEach((e) => {
+    if (!uniques.includes(e)) uniques.push(e);
+  });
+  return uniques;
+};
+
+/**
+ * @param {Array} arr
+ * @param {Number} val
+ * @return {*}
+ */
+const arrIndexOf = (arr, val) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] == val) return i;
+  }
+  return -1;
+};
+
+/**
+ * generate a random string
+ * @param {Number} length - length of random string
+ * @return {String}
+ */
+const makeKey = (length) => {
+  const n = isNil(length) ? 6 : length;
+  let result = "";
+  const chr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const chrLength = chr.length;
+  for (let i = 0; i < n; i++) {
+    result += chr.charAt(Math.floor(Math.random() * chrLength));
+  }
+  return result;
+};
+
+/**
+ * generating embed vo
+ * @param {Number} url - url's video
+ * @return {String}
+ */
+const embedYtVideo = (url) => {
+  if (!url.includes("youtu")) throw new Error("Only accept YouTube url");
+  const regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+
+  if (match && match[2].length === 11) return match[2];
+  return "error";
+};
+
+/**
+ * Convert string to lowercase
+ * @param {String} str - String to convert
+ * @return {String}
+ */
+const lower = (str) => {
+  return str.toLowerCase();
+};
+
+/**
+ * Convert CamelCaseString to kebab-case-string
+ * @param {String} str - String to convert
+ * @return {String}
+ */
+const toKebabCase = (str) => {
+  if (isNil(str)) return null;
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+};
+
+/**
+ * Convert CamelCaseString to snake_case
+ * @param {String} str - String to convert
+ * @return {String}
+ */
+const toSnakeCase = (str) => {
+  if (isNil(str)) return null;
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1_$2")
+    .replace(/\s+/g, "_")
+    .toLowerCase();
+};
+
+/**
+ * Convert number like '2' into '02'
+ * @param {Number or String} int
+ * @return {String}
+ */
+const addZero = (int) => {
+  if (isNil(int)) throw new Error("Value can't be 'null' or 'undefined'");
+  if (isNaN(int)) throw new Error("'addZero' only accept 'Int' or 'Number'");
+  return int < 10 ? `0${int}` : `${int}`;
+};
+
+/**
+ * First letter in uppercase
+ * @param {String} str
+ * @return {String}
+ */
+const capitalize = (str) => {
+  if (isNil(str)) throw new Error("Value can't be 'null' or 'undefined'");
+  if (typeof str !== "string" || !str instanceof String)
+    throw new Error("Value need to be a string");
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+/**
+ * Pluralize
+ * @param {String} singular
+ * @param {Number} count
+ * @param {String|null} plural
+ * @return {string}
+ */
+const pluralize = (singular, count = 1, plural = null) => {
+  if (isNil(singular)) throw new Error("Value can't be 'null' or 'undefined'");
+  if (typeof singular !== "string" || !singular instanceof String)
+    throw new Error("Value need to be a string");
+  if (isNil(plural)) return count > 1 ? `${singular}s` : singular;
+  return count > 1 || count === 0 ? plural : singular;
+};
+
 module.exports = {
   isNil,
   isObj,
   isBlank,
+  mergeObjIf,
   isEmpty,
   isValidDate,
+  hasOwnProperty,
   objPick,
-  embedYtVideo,
   only,
   isDigitsOnly,
-  makeKey,
-  lower,
   getChildrenN,
-  toKebabCase,
-  toSnakeCase,
   getObjKeyName,
-  removeDuplicates,
-  addZero,
-  capitalize,
-  pluralize,
   omit,
   isEqual,
-  arrIndexOf,
   deepCopy,
   convertStringToPropGetter,
   constructQueries,
   getObjectFromValue,
+  groupByKey,
+  removeDuplicates,
+  arrIndexOf,
+  makeKey,
+  embedYtVideo,
+  lower,
+  toKebabCase,
+  toSnakeCase,
+  addZero,
+  capitalize,
+  pluralize,
 };
